@@ -17,6 +17,14 @@ module Either
     def left
       @value
     end
+
+    def left_map
+      Left.new(yield @value)
+    end
+
+    def right_map
+      self
+    end
   end
 
   class Right < Base
@@ -30,6 +38,14 @@ module Either
 
     def right
       @value
+    end
+
+    def left_map
+      self
+    end
+
+    def right_map
+      Right.new(yield @value)
     end
   end
 end

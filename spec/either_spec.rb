@@ -22,6 +22,28 @@ describe 'Either' do
         expect(either_left.left).to eq :my_left
       end
     end
+
+    describe '#left_map' do
+      it 'executes given block with value and wraps result in a Left' do
+        either = either_left.left_map(&:to_s)
+        expect(either.left?).to be true
+        expect(either.left).to eq 'my_left'
+      end
+    end
+
+    describe '#right_map' do
+      it 'returns self' do
+        expect(either_left.right_map { :other }).to eq either_left
+      end
+
+      it 'does not execute given block' do
+        expect do
+          either_left.right_map do
+            raise 'should not run'
+          end
+        end.not_to raise_error
+      end
+    end
   end
 
   describe Either::Right do
@@ -40,6 +62,28 @@ describe 'Either' do
     describe '#right' do
       it 'returns the wrapped value' do
         expect(either_right.right).to eq :my_right
+      end
+    end
+
+    describe '#left_map' do
+      it 'returns self' do
+        expect(either_right.left_map { :other }).to eq either_right
+      end
+
+      it 'does not execute given block' do
+        expect do
+          either_right.left_map do
+            raise 'should not run'
+          end
+        end.not_to raise_error
+      end
+    end
+
+    describe '#right_map' do
+      it 'executes given block with value and wraps result in a Right' do
+        either = either_right.right_map(&:to_s)
+        expect(either.right?).to be true
+        expect(either.right).to eq 'my_right'
       end
     end
   end
