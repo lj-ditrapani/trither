@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Lyall Jonathan Di Trapani']
   spec.email         = ['lj.ditrapani@gmail.com']
 
-  spec.summary       = 'Simple implementations of Try and Either'
+  spec.summary       = 'Simple implementations of Try, Either, and Option'
   spec.description   =
-    'Very simple implementations of Try and Either inspired by Scala'
+    'Very simple implementations of Try, Either, and Option inspired by Scala'
   spec.homepage      = 'https://github.com/lj-ditrapani/trither'
   spec.license       = 'MIT'
 
@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
     lib/trither/version.rb
     lib/trither/try.rb
     lib/trither/either.rb
+    lib/trither/option.rb
   )
   spec.require_paths = ['lib']
 
