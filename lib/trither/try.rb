@@ -10,11 +10,11 @@ module Try
       true
     end
 
-    def then
+    def flat_map
       self
     end
 
-    def on_success
+    def map
       self
     end
 
@@ -22,8 +22,8 @@ module Try
       Failure.new(yield @value)
     end
 
-    def on_failure
-      Result.new(yield @value)
+    def get_or_else
+      yield @value
     end
   end
 
@@ -32,11 +32,11 @@ module Try
       false
     end
 
-    def then
+    def flat_map
       yield @value
     end
 
-    def on_success
+    def map
       Success.new(yield @value)
     end
 
@@ -44,13 +44,7 @@ module Try
       self
     end
 
-    def on_failure
-      Result.new @value
-    end
-  end
-
-  class Result < Base
-    def unwrap
+    def get_or_else
       @value
     end
   end

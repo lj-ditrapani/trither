@@ -11,9 +11,9 @@ describe Try do
       end
     end
 
-    describe '#then' do
+    describe '#flat_map' do
       it 'returns self' do
-        new_try = try_failure.then do
+        new_try = try_failure.flat_map do
           try_success
         end
         expect(new_try).to eq try_failure
@@ -21,16 +21,16 @@ describe Try do
 
       it 'does not execute the try_block' do
         expect do
-          try_failure.then do
+          try_failure.flat_map do
             raise 'should not run'
           end
         end.not_to raise_error
       end
     end
 
-    describe '#on_success' do
+    describe '#map' do
       it 'returns self' do
-        new_try = try_failure.on_success do
+        new_try = try_failure.map do
           :my_data
         end
         expect(new_try).to eq try_failure
@@ -38,7 +38,7 @@ describe Try do
 
       it 'does not execute the try_block' do
         expect do
-          try_failure.on_success do
+          try_failure.map do
             raise 'should not run'
           end
         end.not_to raise_error
@@ -46,15 +46,17 @@ describe Try do
     end
 
     describe '#fail_map' do
-      it 'executes given block with error value and wraps result in a Failure' do
+      it(
+        'executes given block with error value and wraps result in a Failure'
+      ) do
         try = try_failure.fail_map(&:to_s)
-        expect(try.on_failure { |e| e }.unwrap).to eq 'my_error'
+        expect(try.get_or_else { |e| e }).to eq 'my_error'
       end
     end
 
-    describe '#on_failure' do
-      it "executes given block with error value and returns block's result" do
-        error = try_failure.on_failure(&:to_s).unwrap
+    describe '#get_or_else' do
+      it 'executes given block with error value and returns result' do
+        error = try_failure.get_or_else(&:to_s)
         expect(error).to eq 'my_error'
       end
     end
@@ -67,40 +69,40 @@ describe Try do
       end
     end
 
-    describe '#then' do
+    describe '#flat_map' do
       it 'executes the given block' do
         expect do
-          try_success.then do
+          try_success.flat_map do
             raise 'should run'
           end
         end.to raise_error('should run')
       end
 
-      context 'when the block returns an Error' do
+      context 'when the block returns an Failure' do
         it "pass value to block & returns the block's result" do
-          try = try_success.then do |data|
+          try = try_success.flat_map do |data|
             Try::Failure.new "bad #{data}"
           end
           expect(try.failure?).to eq true
-          expect(try.on_failure { |e| e }.unwrap).to eq 'bad my_data'
+          expect(try.get_or_else { |e| e }).to eq 'bad my_data'
         end
       end
 
-      context 'when the block returns a Data' do
+      context 'when the block returns a Success' do
         it "pass value to block & returns the block's result" do
-          try = try_success.then do |data|
+          try = try_success.flat_map do |data|
             Try::Success.new data.to_s
           end
           expect(try.failure?).to eq false
-          expect(try.on_failure { :no_op }.unwrap).to eq 'my_data'
+          expect(try.get_or_else { :no_op }).to eq 'my_data'
         end
       end
     end
 
-    describe '#on_success' do
+    describe '#map' do
       it 'executes given block with data value and wraps result in a Success' do
-        try = try_success.on_success(&:to_s)
-        expect(try.on_failure { :no_op }.unwrap).to eq 'my_data'
+        try = try_success.map(&:to_s)
+        expect(try.get_or_else { :no_op }).to eq 'my_data'
       end
     end
 
@@ -121,14 +123,14 @@ describe Try do
       end
     end
 
-    describe '#on_failure' do
+    describe '#get_or_else' do
       it 'returns the data value' do
-        expect(try_success.on_failure { :no_op }.unwrap).to eq :my_data
+        expect(try_success.get_or_else { :no_op }).to eq :my_data
       end
 
       it 'does not execute the try_block' do
         expect do
-          try_success.on_failure do
+          try_success.get_or_else do
             raise 'should not run'
           end
         end.not_to raise_error
