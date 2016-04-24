@@ -29,7 +29,7 @@ try = Try::Success.new('data')
 another_try = try.flat_map do |data|
   do_something_and_return_a_try(data)
 end
-a_3rd_try = try.map do |data|
+a_3rd_try = another_try.map do |data|
   do_something_and_return_new_data(data)
 end
 result = a_3rd_try.get_or_else do |error|
@@ -37,7 +37,7 @@ result = a_3rd_try.get_or_else do |error|
 end
 
 either = Either::Right.new('data')
-  .right_map { |right_data| do_righty_stuff(data) }
+  .right_map { |right_data| do_righty_stuff(right_data) }
   .left_map { |left_data| do_lefty_stuff(left_data) }
 
 if either.right?
