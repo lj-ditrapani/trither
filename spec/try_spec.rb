@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe Try do
   let(:try_failure) { Try::Failure.new :my_error }
   let(:try_success) { Try::Success.new :my_data }

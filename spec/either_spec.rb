@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe 'Either' do
   let(:either_left) { Either::Left.new :my_left }
   let(:either_right) { Either::Right.new :my_right }
@@ -15,7 +17,7 @@ describe 'Either' do
       end
     end
 
-    describe 'left' do
+    describe '#left' do
       it 'returns the wrapped value' do
         expect(either_left.left).to eq :my_left
       end
@@ -35,7 +37,7 @@ describe 'Either' do
       end
     end
 
-    describe 'right' do
+    describe '#right' do
       it 'returns the wrapped value' do
         expect(either_right.right).to eq :my_right
       end
