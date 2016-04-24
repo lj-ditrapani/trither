@@ -20,6 +20,35 @@ Or install it yourself as:
     $ gem install trither
 
 
+## API
+
+Try (Success of Failure) methods
+
+    failure?    true if Failure
+    flat_map    executes given block if Success
+    map         executes given block if Success and wraps result in Success
+    fail_map    executes given block if Failure and wraps result in Failure
+    get_or_else returns value if Success, else
+                executes given block if Failure and returns result
+
+Either (Left or Right) methods
+
+    left?       true if Left
+    right?      true if Right
+    left        returns value; defined on Left only
+    right       returns value; defined on Right only
+    left_map    executes given block if Left
+    right_map   executes given block if Right
+
+Option (Some or None) methods
+
+    empty?      true if None
+    fetch       returns value if Some, else returns default
+    map         executes given block if Some and wraps result in Option
+    flat_map    executes given block if Some;
+                returns None if block returns nil, else returns block's result
+
+
 ## Usage
 
 ```ruby
