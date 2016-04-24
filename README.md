@@ -67,3 +67,16 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/lj-dit
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+
+## TODO
+
+Possibly add filter to Try & Option
+- Use cases:
+  - Try: convert Success to Failure unless condition is met
+  - Option: convert Some to None unless condition is met
+- Not sure if the use cases are that useful
+
+Possibly add `flat_map` to Either (`right_flat_map` & `left_flat_map`)
+- Use case:  If you have an operation on an either that returns another either
+- Not sure if the use case is that useful
