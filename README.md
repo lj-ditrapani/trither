@@ -1,6 +1,6 @@
 # Trither
 
-Very simple implementations of Try and Either inspired by Scala
+Very simple implementations of Try, Either, and Option inspired by Scala
 
 
 ## Installation
@@ -29,14 +29,27 @@ try = Try::Success.new('data')
 another_try = try.flat_map do |data|
   do_something_and_return_a_try(data)
 end
-result = another_try.get_or_else do |error|
+a_3rd_try = try.map do |data|
+  do_something_and_return_new_data(data)
+end
+result = a_3rd_try.get_or_else do |error|
   handle_error(error)
 end
 
 either = Either::Right.new('data')
+  .right_map { |right_data| do_righty_stuff(data) }
+  .left_map { |left_data| do_lefty_stuff(left_data) }
+
 if either.right?
   do_something(either.right)
+else
+  do_something_else(either.left)
 end
+
+# returns 'fail'
+Option.make(nil).map { |s| s + ' world' }.fetch('fail')
+# returns 'hello world'
+Option.make('hello').map { |s| s + ' world' }.fetch('fail')
 ```
 
 
@@ -54,4 +67,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/lj-dit
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
