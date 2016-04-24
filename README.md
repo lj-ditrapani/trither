@@ -23,14 +23,13 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-try = Try::Success('data')
-another_try = try.then do |data|
+try = Try::Success.new('data')
+another_try = try.flat_map do |data|
   do_something_and_return_a_try(data)
 end
-result = another_try.on_failure do |error|
+result = another_try.get_or_else do |error|
   handle_error(error)
 end
-result.unwrap
 
 either = Either::Right.new('data')
 if either.right?
