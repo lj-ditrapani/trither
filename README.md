@@ -23,6 +23,8 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
+require 'trither'
+
 try = Try::Success.new('data')
 another_try = try.flat_map do |data|
   do_something_and_return_a_try(data)
