@@ -14,7 +14,12 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/lj-ditrapani/trither"
   spec.license       = "MIT"
 
-  spec.files = %w(lib/trither.rb lib/trither/try.rb lib/trither/either.rb)
+  spec.files = %w(
+    lib/trither.rb
+    lib/trither/version.rb
+    lib/trither/try.rb
+    lib/trither/either.rb
+  )
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.11"

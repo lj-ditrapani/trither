@@ -22,19 +22,21 @@ Or install it yourself as:
 
 ## Usage
 
-    try = Try::Success('data')
-    another_try = try.then do |data|
-      do_something_and_return_a_try(data)
-    end
-    result = another_try.on_failure do |error|
-      handle_error(error)
-    end
-    result.unwrap
+```ruby
+try = Try::Success('data')
+another_try = try.then do |data|
+  do_something_and_return_a_try(data)
+end
+result = another_try.on_failure do |error|
+  handle_error(error)
+end
+result.unwrap
 
-    either = Either::Right.new('data')
-    if either.right?
-      do_something(either.right)
-    end
+either = Either::Right.new('data')
+if either.right?
+  do_something(either.right)
+end
+```
 
 
 ## Development
