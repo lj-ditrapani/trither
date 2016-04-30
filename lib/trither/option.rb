@@ -23,6 +23,10 @@ module Option
     def self.flat_map
       self
     end
+
+    def self.get_or_else
+      yield
+    end
   end
 
   class Some
@@ -49,6 +53,10 @@ module Option
       else
         result
       end
+    end
+
+    def get_or_else
+      @value
     end
   end
 end

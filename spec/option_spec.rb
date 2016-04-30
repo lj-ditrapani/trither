@@ -55,6 +55,20 @@ describe Option do
         end.not_to raise_error
       end
     end
+
+    describe '.get_or_else' do
+      it 'executes the given block' do
+        expect do
+          none.get_or_else do
+            raise 'should run'
+          end
+        end.to raise_error('should run')
+      end
+
+      it 'returns value of given block' do
+        expect(none.get_or_else { :else_data }).to eq :else_data
+      end
+    end
   end
 
   describe Option::Some do
@@ -122,6 +136,18 @@ describe Option do
           option = some.flat_map { |_data| nil }
           expect(option).to be Option::None
         end
+      end
+    end
+
+    describe '#get_or_else' do
+      it 'returns value' do
+        expect(some.get_or_else).to eq :data
+      end
+
+      it 'does not execute block' do
+        expect do
+          some.get_or_else { raise 'should not run' }
+        end.not_to raise_error
       end
     end
   end
