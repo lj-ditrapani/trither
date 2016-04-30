@@ -1,4 +1,10 @@
 module Try
+  def self.make
+    Success.new(yield)
+  rescue StandardError => error
+    Failure.new(error)
+  end
+
   class Base
     def initialize(value)
       @value = value

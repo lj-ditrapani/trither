@@ -4,6 +4,23 @@ describe Try do
   let(:try_failure) { Try::Failure.new :my_error }
   let(:try_success) { Try::Success.new :my_data }
 
+  describe '.make' do
+    it 'returns Success(value) if block succeeds without error' do
+      try = Try.make { :data }
+      expect(try.failure?).to eq false
+      expect(try.get_or_else).to eq :data
+    end
+
+    it 'returns Failure(error) if block raises an error' do
+      try = Try.make { raise FloatDomainError, 'foo' }
+      expect(try.failure?).to be true
+      try.fail_map do |error|
+        expect(error.class).to eq FloatDomainError
+        expect(error.message).to eq 'foo'
+      end
+    end
+  end
+
   describe Try::Failure do
     describe '#failure?' do
       it 'returns true' do
