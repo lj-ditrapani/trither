@@ -100,6 +100,16 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ## TODO
 
+Option: add `get_or_else` method. `option.get_or_else { computation }`
+- Some => returns value of Some (unwraps the value v inside of Some(v))
+- None => returns result of block
+
+Try
+- make or new
+- Try.make { computation }
+- if block raises exception e => Failure(e)
+- if block succeeds => Success(result of block)
+
 Possibly add filter to Try & Option
 - Use cases:
   - Try: convert Success to Failure unless condition is met
@@ -109,3 +119,8 @@ Possibly add filter to Try & Option
 Possibly add `flat_map` to Either (`right_flat_map` & `left_flat_map`)
 - Use case:  If you have an operation on an either that returns another either
 - Not sure if the use case is that useful
+- Makes it more monadic
+
+Possibly add `empty_map` or `none_map` to Option
+- Some(x) => Some(x)
+- None => yield block()
