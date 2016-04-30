@@ -24,29 +24,44 @@ Or install it yourself as:
 
 Try (Success of Failure) methods
 
-    failure?    true if Failure
-    flat_map    executes given block if Success
-    map         executes given block if Success and wraps result in Success
-    fail_map    executes given block if Failure and wraps result in Failure
-    get_or_else returns value if Success, else
-                executes given block if Failure and returns result
+    failure?    Failure(error) => true
+                Success(value) => false
+    flat_map    Failure(error) => Failure(error)
+                Success(value) => executes given block and returns result
+    map         Failure(error) => Failure(error)
+                Success(value) => executes given block & returns Success(result)
+    fail_map    Failure(error) => executes given block & returns Failure(result)
+                Success(value) => Success(value)
+    get_or_else Success(value) => returns the value
+                Failure(error) => executes given block and returns result
 
 Either (Left or Right) methods
 
-    left?       true if Left
-    right?      true if Right
+    left?       Left(value) => true
+                Right(value) => false
+    right?      Left(value) => false
+                Right(value) => true
     left        returns value; defined on Left only
     right       returns value; defined on Right only
-    left_map    executes given block if Left
-    right_map   executes given block if Right
+    left_map    Left(value) => executes given block and returns Left(result)
+                Right(value) => Right(value)
+    right_map   Left(value) => Left(value)
+                Right(value) => executes given block and returns Right(result)
 
 Option (Some or None) methods
 
-    empty?      true if None
-    fetch       returns value if Some, else returns default
-    map         executes given block if Some and wraps result in Option
-    flat_map    executes given block if Some;
-                returns None if block returns nil, else returns block's result
+    empty?      None => true
+                Some(value) => false
+    fetch       None => returns default
+                Some(value) => returns value
+    map         None => returns None
+                Some(value) => executes given block and wraps result in Option
+    flat_map    None => returns None
+                Some(value) => executes given block
+                               if block's result is nil => None
+                               else => block's result
+    get_or_else None => executes given block and returns result
+                Some(value) => returns value
 
 
 ## Usage
@@ -75,10 +90,14 @@ else
   do_something_else(either.left)
 end
 
-# returns 'fail'
-Option.make(nil).map { |s| s + ' world' }.fetch('fail')
+# returns 'No greeting'
+Option.make(nil).map { |s| s + ' world' }.fetch('No greeting')
 # returns 'hello world'
-Option.make('hello').map { |s| s + ' world' }.fetch('fail')
+Option.make('hello').map { |s| s + ' world' }.fetch('No greeting')
+# returns 'No greeting'
+Option.make(nil).map { |s| s + ' world' }.get_or_else { 'No greeting' }
+# returns 'hello world'
+Option.make('hello').map { |s| s + ' world' }.or_else { 'No greeting' }
 ```
 
 
@@ -99,10 +118,6 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 
 ## TODO
-
-Option: add `get_or_else` method. `option.get_or_else { computation }`
-- Some => returns value of Some (unwraps the value v inside of Some(v))
-- None => returns result of block
 
 Try
 - make or new
