@@ -109,7 +109,7 @@ Option.make('hello').map { |s| s + ' world' }.fetch('No greeting')
 # returns 'No greeting'
 Option.make(nil).map { |s| s + ' world' }.get_or_else { 'No greeting' }
 # returns 'hello world'
-Option.make('hello').map { |s| s + ' world' }.or_else { 'No greeting' }
+Option.make('hello').map { |s| s + ' world' }.get_or_else { 'No greeting' }
 ```
 
 
