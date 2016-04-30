@@ -22,6 +22,16 @@ Or install it yourself as:
 
 ## API
 
+Factory methods
+
+    Try.make { computation }
+        If computation raises an error => Failure(error)
+        If computation returs without raising an error => Success(result)
+
+    Option.make(value)
+        If value.nil? => None
+        Else => Some(value)
+
 Try (Success of Failure) methods
 
     failure?    Failure(error) => true
@@ -54,12 +64,12 @@ Option (Some or None) methods
                 Some(value) => false
     fetch       None => returns default
                 Some(value) => returns value
-    map         None => returns None
-                Some(value) => executes given block and wraps result in Option
     flat_map    None => returns None
                 Some(value) => executes given block
                                if block's result is nil => None
                                else => block's result
+    map         None => returns None
+                Some(value) => executes given block and wraps result in Option
     get_or_else None => executes given block and returns result
                 Some(value) => returns value
 
@@ -79,6 +89,8 @@ end
 result = a_3rd_try.get_or_else do |error|
   handle_error(error)
 end
+# Can also use factory method
+try = Try.make { some_risky_computation() }
 
 either = Either::Right.new('data')
   .right_map { |right_data| do_righty_stuff(right_data) }
@@ -118,12 +130,6 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 
 ## TODO
-
-Try
-- make or new
-- Try.make { computation }
-- if block raises exception e => Failure(e)
-- if block succeeds => Success(result of block)
 
 Possibly add filter to Try & Option
 - Use cases:
