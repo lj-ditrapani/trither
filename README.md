@@ -36,6 +36,10 @@ Try (Success of Failure) methods
 
     failure?    Failure(error) => true
                 Success(value) => false
+    filter      Failure(error) => Failure(error)
+                Success(value) => executes given block
+                                  if block's result is true => Success(value)
+                                  else => Failure(None)
     flat_map    Failure(error) => Failure(error)
                 Success(value) => executes given block and returns result
     map         Failure(error) => Failure(error)
@@ -64,6 +68,10 @@ Option (Some or None) methods
 
     empty?      None => true
                 Some(value) => false
+    filter      None => None
+                Some(value) => executes given block
+                               if block's result is true => Some(value)
+                               else => None
     fetch       None => returns default
                 Some(value) => returns value
     flat_map    None => returns None

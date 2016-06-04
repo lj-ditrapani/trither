@@ -10,6 +10,10 @@ module Try
       true
     end
 
+    def filter
+      self
+    end
+
     def flat_map
       self
     end
@@ -19,7 +23,7 @@ module Try
     end
 
     def fail_map
-      Failure.new(yield @value)
+      Failure.new yield(@value)
     end
 
     def or_else
@@ -36,12 +40,16 @@ module Try
       false
     end
 
+    def filter
+      yield(@value) ? self : Failure.new(Option::None)
+    end
+
     def flat_map
       yield @value
     end
 
     def map
-      Success.new(yield @value)
+      Success.new yield(@value)
     end
 
     def fail_map

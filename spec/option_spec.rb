@@ -22,6 +22,18 @@ describe Option do
       end
     end
 
+    describe '.filter' do
+      it 'returns self' do
+        expect(none.filter).to be none
+      end
+
+      it 'does not execute given block' do
+        expect do
+          none.filter { raise 'should not run' }
+        end.not_to raise_error
+      end
+    end
+
     describe '.fetch' do
       it 'returns default' do
         expect(none.fetch('')).to eq ''
@@ -82,6 +94,22 @@ describe Option do
     describe '#empty?' do
       it 'returns false' do
         expect(some.empty?).to be false
+      end
+    end
+
+    describe '#filter' do
+      context 'the predicate returns true' do
+        it 'returns self' do
+          option = some.filter { |data| data == :data }
+          expect(option).to eq some
+        end
+      end
+
+      context 'the predicate returns false' do
+        it 'returns None' do
+          option = some.filter { |data| data != :data }
+          expect(option).to eq none
+        end
       end
     end
 

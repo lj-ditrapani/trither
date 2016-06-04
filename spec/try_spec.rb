@@ -26,6 +26,19 @@ describe Try do
       end
     end
 
+    describe '#filter' do
+      it 'does not execute the try_block' do
+        expect do
+          try_failure.filter { raise 'should not run' }
+        end.not_to raise_error
+      end
+
+      it 'returns self' do
+        new_try = try_failure.filter { :my_data }
+        expect(new_try).to eq try_failure
+      end
+    end
+
     describe '#flat_map' do
       it 'returns self' do
         new_try = try_failure.flat_map { try_success }
@@ -82,6 +95,22 @@ describe Try do
     describe '#failure?' do
       it 'returns false' do
         expect(try_success.failure?).to eq(false)
+      end
+    end
+
+    describe '#filter' do
+      context 'the predicate returns true' do
+        it 'returns self' do
+          try = try_success.filter { |data| data == :my_data }
+          expect(try).to eq try_success
+        end
+      end
+
+      context 'the predicate returns false' do
+        it 'returns a Failure(None)' do
+          try = try_success.filter { |data| data != :my_data }
+          expect(try).to eq Try::Failure.new(Option::None)
+        end
       end
     end
 

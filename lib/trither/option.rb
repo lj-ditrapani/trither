@@ -12,6 +12,10 @@ module Option
       true
     end
 
+    def self.filter
+      self
+    end
+
     def self.fetch(default)
       default
     end
@@ -36,6 +40,10 @@ module Option
   class Some < Trither::Box
     def empty?
       false
+    end
+
+    def filter
+      yield(@value) ? self : None
     end
 
     def fetch(_default)
