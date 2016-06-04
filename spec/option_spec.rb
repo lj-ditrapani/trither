@@ -35,9 +35,7 @@ describe Option do
 
       it 'does not execute given block' do
         expect do
-          none.map do
-            raise 'should not run'
-          end
+          none.map { raise 'should not run' }
         end.not_to raise_error
       end
     end
@@ -49,19 +47,28 @@ describe Option do
 
       it 'does not execute given block' do
         expect do
-          none.flat_map do
-            raise 'should not run'
-          end
+          none.flat_map { raise 'should not run' }
         end.not_to raise_error
+      end
+    end
+
+    describe '.or_else' do
+      it 'executes the given block' do
+        expect do
+          none.or_else { raise 'should run' }
+        end.to raise_error('should run')
+      end
+
+      it 'returns value of given block' do
+        option = none.get_or_else { Option.make :else_data }
+        expect(option).to eq Option::Some.new(:else_data)
       end
     end
 
     describe '.get_or_else' do
       it 'executes the given block' do
         expect do
-          none.get_or_else do
-            raise 'should run'
-          end
+          none.get_or_else { raise 'should run' }
         end.to raise_error('should run')
       end
 
@@ -102,9 +109,7 @@ describe Option do
     describe '#flat_map' do
       it 'executes the given block' do
         expect do
-          some.flat_map do
-            raise 'should run'
-          end
+          some.flat_map { raise 'should run' }
         end.to raise_error('should run')
       end
 
@@ -133,6 +138,18 @@ describe Option do
           option = some.flat_map { |_data| nil }
           expect(option).to be Option::None
         end
+      end
+    end
+
+    describe '#or_else' do
+      it 'returns self' do
+        expect(some.or_else).to be some
+      end
+
+      it 'does not execute given block' do
+        expect do
+          some.or_else { raise 'should not run' }
+        end.not_to raise_error
       end
     end
 

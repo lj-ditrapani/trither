@@ -24,6 +24,10 @@ module Option
       self
     end
 
+    def self.or_else
+      yield
+    end
+
     def self.get_or_else
       yield
     end
@@ -49,6 +53,10 @@ module Option
       else
         result
       end
+    end
+
+    def or_else
+      self
     end
 
     def get_or_else

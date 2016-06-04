@@ -70,6 +70,8 @@ Option (Some or None) methods
                                else => block's result
     map         None => returns None
                 Some(value) => executes given block and wraps result in Option
+    or_else     None => executes given blocke and returns result
+                Some(value) => returns Some(value)
     get_or_else None => executes given block and returns result
                 Some(value) => returns value
 
@@ -137,8 +139,6 @@ The gem is available as open source under the terms of the
 
 
 ## TODO
-
-Implement equality on Try, Either, & Option
 
 Add `or_else` to Option
 - Some(x) => Some(x)
