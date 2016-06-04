@@ -5,17 +5,7 @@ module Try
     Failure.new(error)
   end
 
-  class Base
-    def initialize(value)
-      @value = value
-    end
-  end
-
-  class Failure < Base
-    def ==(other)
-      (other.class == Failure) && (@value == other.get_or_else { |e| e })
-    end
-
+  class Failure < Trither::Box
     def failure?
       true
     end
@@ -37,11 +27,7 @@ module Try
     end
   end
 
-  class Success < Base
-    def ==(other)
-      (other.class == Success) && (@value == other.get_or_else)
-    end
-
+  class Success < Trither::Box
     def failure?
       false
     end

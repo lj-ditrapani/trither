@@ -1,15 +1,5 @@
 module Either
-  class Base
-    def initialize(value)
-      @value = value
-    end
-  end
-
-  class Left < Base
-    def ==(other)
-      (other.class == Left) && @value == other.left
-    end
-
+  class Left < Trither::Box
     def left?
       true
     end
@@ -31,11 +21,7 @@ module Either
     end
   end
 
-  class Right < Base
-    def ==(other)
-      (other.class == Right) && @value == other.right
-    end
-
+  class Right < Trither::Box
     def left?
       false
     end

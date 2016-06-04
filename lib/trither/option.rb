@@ -29,15 +29,7 @@ module Option
     end
   end
 
-  class Some
-    def initialize(value)
-      @value = value
-    end
-
-    def ==(other)
-      (other.class == Some) && @value == other.fetch(None)
-    end
-
+  class Some < Trither::Box
     def empty?
       false
     end
