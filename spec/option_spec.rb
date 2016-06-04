@@ -69,6 +69,16 @@ describe Option do
         expect(none.get_or_else { :else_data }).to eq :else_data
       end
     end
+
+    describe '==' do
+      it 'returns true if lhs is None' do
+        expect(none == Option::None).to be true
+      end
+
+      it 'returns false if lhs is not None' do
+        expect(none == some).to be false
+      end
+    end
   end
 
   describe Option::Some do
@@ -148,6 +158,20 @@ describe Option do
         expect do
           some.get_or_else { raise 'should not run' }
         end.not_to raise_error
+      end
+    end
+
+    describe '==' do
+      it 'returns true if contents of somes are equal' do
+        expect(some == Option.make(:data)).to be true
+      end
+
+      it 'returns false if lhs is not a Some' do
+        expect(some == :other).to be false
+      end
+
+      it 'returns false if contents of somes not are equal' do
+        expect(some == Option.make(:other)).to be false
       end
     end
   end

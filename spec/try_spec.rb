@@ -22,6 +22,20 @@ describe Try do
   end
 
   describe Try::Failure do
+    describe '==' do
+      it 'returns true if both values are equal' do
+        expect(try_failure == Try::Failure.new(:my_error)).to be true
+      end
+
+      it 'returns false if lhs is not a Failure' do
+        expect(try_failure == :my_error).to be false
+      end
+
+      it 'returns false if the values are not equal' do
+        expect(try_failure == Try::Failure.new(:other)).to be false
+      end
+    end
+
     describe '#failure?' do
       it 'returns true' do
         expect(try_failure.failure?).to eq(true)
@@ -80,6 +94,20 @@ describe Try do
   end
 
   describe Try::Success do
+    describe '==' do
+      it 'returns true if both values are equal' do
+        expect(try_success == Try::Success.new(:my_data)).to be true
+      end
+
+      it 'returns false if lhs is not a Success' do
+        expect(try_success == :my_data).to be false
+      end
+
+      it 'returns false if the values are not equal' do
+        expect(try_success == Try::Success.new(:other)).to be false
+      end
+    end
+
     describe '#failure?' do
       it 'returns false' do
         expect(try_success.failure?).to eq(false)

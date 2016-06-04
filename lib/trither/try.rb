@@ -12,6 +12,10 @@ module Try
   end
 
   class Failure < Base
+    def ==(other)
+      (other.class == Failure) && (@value == other.get_or_else { |e| e })
+    end
+
     def failure?
       true
     end
@@ -34,6 +38,10 @@ module Try
   end
 
   class Success < Base
+    def ==(other)
+      (other.class == Success) && (@value == other.get_or_else)
+    end
+
     def failure?
       false
     end

@@ -34,6 +34,10 @@ module Option
       @value = value
     end
 
+    def ==(other)
+      (other.class == Some) && @value == other.fetch(None)
+    end
+
     def empty?
       false
     end

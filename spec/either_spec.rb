@@ -44,6 +44,20 @@ describe 'Either' do
         end.not_to raise_error
       end
     end
+
+    describe '==' do
+      it 'returns true if both values are equal' do
+        expect(either_left == Either::Left.new(:my_left)).to be true
+      end
+
+      it 'returns false if lhs is no a Left' do
+        expect(either_left == :my_left).to be false
+      end
+
+      it 'returns false if the values are not equal' do
+        expect(either_left == Either::Left.new(:other)).to be false
+      end
+    end
   end
 
   describe Either::Right do
@@ -84,6 +98,20 @@ describe 'Either' do
         either = either_right.right_map(&:to_s)
         expect(either.right?).to be true
         expect(either.right).to eq 'my_right'
+      end
+    end
+
+    describe '==' do
+      it 'returns true if both values are equal' do
+        expect(either_right == Either::Right.new(:my_right)).to be true
+      end
+
+      it 'returns false if lhs is no a Right' do
+        expect(either_right == :my_right).to be false
+      end
+
+      it 'returns false if the values are not equal' do
+        expect(either_right == Either::Right.new(:other)).to be false
       end
     end
   end

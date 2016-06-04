@@ -6,6 +6,10 @@ module Either
   end
 
   class Left < Base
+    def ==(other)
+      (other.class == Left) && @value == other.left
+    end
+
     def left?
       true
     end
@@ -28,6 +32,10 @@ module Either
   end
 
   class Right < Base
+    def ==(other)
+      (other.class == Right) && @value == other.right
+    end
+
     def left?
       false
     end
