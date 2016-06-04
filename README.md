@@ -149,17 +149,11 @@ The gem is available as open source under the terms of the
 
 
 ## TODO
-Possibly add filter to Try & Option
-- Use cases:
-  - Try: convert Success to Failure unless condition is met
-  - Option: convert Some to None unless condition is met
-- Not sure if the use cases are that useful
-
-Possibly add `empty_map` or `none_map` to Option
-- Some(x) => Some(x)
-- None => Try.make(yield block())
-
 Possibly add `flat_map` to Either (`right_flat_map` & `left_flat_map`)
 - Use case:  If you have an operation on an either that returns another either
 - Not sure if the use case is that useful
 - Makes it more monadic
+
+Possibly add `empty_map` or `none_map` to Option
+- Some(x) => Some(x)
+- None => Try.make(yield block())
