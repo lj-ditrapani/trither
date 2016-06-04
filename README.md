@@ -42,8 +42,10 @@ Try (Success of Failure) methods
                 Success(value) => executes given block & returns Success(result)
     fail_map    Failure(error) => executes given block & returns Failure(result)
                 Success(value) => Success(value)
-    get_or_else Success(value) => returns the value
-                Failure(error) => executes given block and returns result
+    or_else     Failure(error) => executes given block and returns result
+                Success(value) => Success(value)
+    get_or_else Failure(error) => executes given block and returns result
+                Success(value) => returns the value
 
 Either (Left or Right) methods
 
@@ -139,20 +141,15 @@ The gem is available as open source under the terms of the
 
 
 ## TODO
-
-Add `or_else` to Option
-- Some(x) => Some(x)
-- None => yield block()     # block returns an Option
-
-Possibly add `empty_map` or `none_map` to Option
-- Some(x) => Some(x)
-- None => Try.make(yield block())
-
 Possibly add filter to Try & Option
 - Use cases:
   - Try: convert Success to Failure unless condition is met
   - Option: convert Some to None unless condition is met
 - Not sure if the use cases are that useful
+
+Possibly add `empty_map` or `none_map` to Option
+- Some(x) => Some(x)
+- None => Try.make(yield block())
 
 Possibly add `flat_map` to Either (`right_flat_map` & `left_flat_map`)
 - Use case:  If you have an operation on an either that returns another either

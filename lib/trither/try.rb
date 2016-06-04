@@ -22,6 +22,10 @@ module Try
       Failure.new(yield @value)
     end
 
+    def or_else
+      yield @value
+    end
+
     def get_or_else
       yield @value
     end
@@ -41,6 +45,10 @@ module Try
     end
 
     def fail_map
+      self
+    end
+
+    def or_else
       self
     end
 

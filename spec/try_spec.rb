@@ -61,6 +61,15 @@ describe Try do
       end
     end
 
+    describe '#or_else' do
+      it 'executes given block with error value and returns result' do
+        try = try_failure.or_else do |error|
+          Try::Success.new "Fixed #{error}"
+        end
+        expect(try).to eq Try::Success.new('Fixed my_error')
+      end
+    end
+
     describe '#get_or_else' do
       it 'executes given block with error value and returns result' do
         error = try_failure.get_or_else(&:to_s)
@@ -118,6 +127,18 @@ describe Try do
         expect do
           try_success.fail_map { raise 'should not run' }
         end.not_to raise_error
+      end
+    end
+
+    describe '#or_else' do
+      it 'does not execute given block' do
+        expect do
+          try_success.or_else { raise 'should not run' }
+        end.not_to raise_error
+      end
+
+      it 'returs self' do
+        expect(try_success.or_else { :my_error }).to eq try_success
       end
     end
 
