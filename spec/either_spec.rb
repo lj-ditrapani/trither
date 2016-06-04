@@ -25,9 +25,7 @@ describe 'Either' do
 
     describe '#left_map' do
       it 'executes given block with value and wraps result in a Left' do
-        either = either_left.left_map(&:to_s)
-        expect(either.left?).to be true
-        expect(either.left).to eq 'my_left'
+        expect(either_left.left_map(&:to_s)).to eq Either::Left.new('my_left')
       end
     end
 
@@ -42,20 +40,6 @@ describe 'Either' do
             raise 'should not run'
           end
         end.not_to raise_error
-      end
-    end
-
-    describe '==' do
-      it 'returns true if both values are equal' do
-        expect(either_left == Either::Left.new(:my_left)).to be true
-      end
-
-      it 'returns false if lhs is no a Left' do
-        expect(either_left == :my_left).to be false
-      end
-
-      it 'returns false if the values are not equal' do
-        expect(either_left == Either::Left.new(:other)).to be false
       end
     end
   end
@@ -96,22 +80,7 @@ describe 'Either' do
     describe '#right_map' do
       it 'executes given block with value and wraps result in a Right' do
         either = either_right.right_map(&:to_s)
-        expect(either.right?).to be true
-        expect(either.right).to eq 'my_right'
-      end
-    end
-
-    describe '==' do
-      it 'returns true if both values are equal' do
-        expect(either_right == Either::Right.new(:my_right)).to be true
-      end
-
-      it 'returns false if lhs is no a Right' do
-        expect(either_right == :my_right).to be false
-      end
-
-      it 'returns false if the values are not equal' do
-        expect(either_right == Either::Right.new(:other)).to be false
+        expect(either).to eq(Either::Right.new('my_right'))
       end
     end
   end

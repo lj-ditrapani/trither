@@ -6,9 +6,7 @@ describe Try do
 
   describe '.make' do
     it 'returns Success(value) if block succeeds without error' do
-      try = Try.make { :data }
-      expect(try.failure?).to eq false
-      expect(try.get_or_else).to eq :data
+      expect(Try.make { :data }).to eq Try::Success.new(:data)
     end
 
     it 'returns Failure(error) if block raises an error' do
@@ -22,20 +20,6 @@ describe Try do
   end
 
   describe Try::Failure do
-    describe '==' do
-      it 'returns true if both values are equal' do
-        expect(try_failure == Try::Failure.new(:my_error)).to be true
-      end
-
-      it 'returns false if lhs is not a Failure' do
-        expect(try_failure == :my_error).to be false
-      end
-
-      it 'returns false if the values are not equal' do
-        expect(try_failure == Try::Failure.new(:other)).to be false
-      end
-    end
-
     describe '#failure?' do
       it 'returns true' do
         expect(try_failure.failure?).to eq(true)
@@ -44,34 +28,26 @@ describe Try do
 
     describe '#flat_map' do
       it 'returns self' do
-        new_try = try_failure.flat_map do
-          try_success
-        end
+        new_try = try_failure.flat_map { try_success }
         expect(new_try).to eq try_failure
       end
 
       it 'does not execute the try_block' do
         expect do
-          try_failure.flat_map do
-            raise 'should not run'
-          end
+          try_failure.flat_map { raise 'should not run' }
         end.not_to raise_error
       end
     end
 
     describe '#map' do
       it 'returns self' do
-        new_try = try_failure.map do
-          :my_data
-        end
+        new_try = try_failure.map { :my_data }
         expect(new_try).to eq try_failure
       end
 
       it 'does not execute the try_block' do
         expect do
-          try_failure.map do
-            raise 'should not run'
-          end
+          try_failure.map { raise 'should not run' }
         end.not_to raise_error
       end
     end
@@ -81,7 +57,7 @@ describe Try do
         'executes given block with error value and wraps result in a Failure'
       ) do
         try = try_failure.fail_map(&:to_s)
-        expect(try.get_or_else { |e| e }).to eq 'my_error'
+        expect(try).to eq Try::Failure.new('my_error')
       end
     end
 
@@ -94,20 +70,6 @@ describe Try do
   end
 
   describe Try::Success do
-    describe '==' do
-      it 'returns true if both values are equal' do
-        expect(try_success == Try::Success.new(:my_data)).to be true
-      end
-
-      it 'returns false if lhs is not a Success' do
-        expect(try_success == :my_data).to be false
-      end
-
-      it 'returns false if the values are not equal' do
-        expect(try_success == Try::Success.new(:other)).to be false
-      end
-    end
-
     describe '#failure?' do
       it 'returns false' do
         expect(try_success.failure?).to eq(false)
@@ -117,9 +79,7 @@ describe Try do
     describe '#flat_map' do
       it 'executes the given block' do
         expect do
-          try_success.flat_map do
-            raise 'should run'
-          end
+          try_success.flat_map { raise 'should run' }
         end.to raise_error('should run')
       end
 
@@ -128,8 +88,7 @@ describe Try do
           try = try_success.flat_map do |data|
             Try::Failure.new "bad #{data}"
           end
-          expect(try.failure?).to eq true
-          expect(try.get_or_else { |e| e }).to eq 'bad my_data'
+          expect(try).to eq Try::Failure.new('bad my_data')
         end
       end
 
@@ -138,8 +97,7 @@ describe Try do
           try = try_success.flat_map do |data|
             Try::Success.new data.to_s
           end
-          expect(try.failure?).to eq false
-          expect(try.get_or_else { :no_op }).to eq 'my_data'
+          expect(try).to eq Try::Success.new('my_data')
         end
       end
     end
@@ -147,23 +105,18 @@ describe Try do
     describe '#map' do
       it 'executes given block with data value and wraps result in a Success' do
         try = try_success.map(&:to_s)
-        expect(try.get_or_else { :no_op }).to eq 'my_data'
+        expect(try).to eq Try::Success.new('my_data')
       end
     end
 
     describe '#fail_map' do
       it 'returns self' do
-        new_try = try_success.fail_map do
-          :my_error
-        end
-        expect(new_try).to eq try_success
+        expect(try_success.fail_map { :my_error }).to eq try_success
       end
 
       it 'does not execute the try_block' do
         expect do
-          try_success.fail_map do
-            raise 'should not run'
-          end
+          try_success.fail_map { raise 'should not run' }
         end.not_to raise_error
       end
     end
@@ -175,9 +128,7 @@ describe Try do
 
       it 'does not execute the try_block' do
         expect do
-          try_success.get_or_else do
-            raise 'should not run'
-          end
+          try_success.get_or_else { raise 'should not run' }
         end.not_to raise_error
       end
     end

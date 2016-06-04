@@ -69,16 +69,6 @@ describe Option do
         expect(none.get_or_else { :else_data }).to eq :else_data
       end
     end
-
-    describe '==' do
-      it 'returns true if lhs is None' do
-        expect(none == Option::None).to be true
-      end
-
-      it 'returns false if lhs is not None' do
-        expect(none == some).to be false
-      end
-    end
   end
 
   describe Option::Some do
@@ -104,9 +94,7 @@ describe Option do
 
       context 'block returns a non-nil' do
         it 'executes given block with value and wraps result in a Some' do
-          option = some.map(&:to_s)
-          expect(option.empty?).to be false
-          expect(option.fetch('')).to eq 'data'
+          expect(some.map(&:to_s)).to eq Option::Some.new('data')
         end
       end
     end
@@ -136,8 +124,7 @@ describe Option do
       context 'when the block returns a Some' do
         it "returns the block's result" do
           option = some.flat_map { |data| Option::Some.new data.to_s }
-          expect(option.empty?).to be false
-          expect(option.fetch('')).to eq 'data'
+          expect(option).to eq Option::Some.new('data')
         end
       end
 
@@ -158,20 +145,6 @@ describe Option do
         expect do
           some.get_or_else { raise 'should not run' }
         end.not_to raise_error
-      end
-    end
-
-    describe '==' do
-      it 'returns true if contents of somes are equal' do
-        expect(some == Option.make(:data)).to be true
-      end
-
-      it 'returns false if lhs is not a Some' do
-        expect(some == :other).to be false
-      end
-
-      it 'returns false if contents of somes not are equal' do
-        expect(some == Option.make(:other)).to be false
       end
     end
   end
