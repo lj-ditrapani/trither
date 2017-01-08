@@ -1,6 +1,8 @@
+require 'contracts'
+
 module Try
   include Contracts::Core
-  C = Contracts
+  include ::Trither::BasicTypes
 
   class Failure < Trither::Box
   end
@@ -8,13 +10,11 @@ module Try
   class Success < Trither::Box
   end
 
-  Predicate = C::Func[C::Any => C::Bool]
   TryType = C::Or[Failure, Success]
-  Func0 = C::Func[C::None => C::Any]
-  Func1 = C::Func[C::Any => C::Any]
   Func0toTry = C::Func[C::None => TryType]
   Func1toTry = C::Func[C::Any => TryType]
 
+  Contract Func1 => TryType
   def self.make
     Success.new(yield)
   rescue StandardError => error
@@ -22,8 +22,7 @@ module Try
   end
 
   class Failure < Trither::Box
-    include Contracts::Core
-    C = Contracts
+    include ::Trither::BasicTypes
 
     Contract C::None => true
     def failure?
@@ -62,8 +61,7 @@ module Try
   end
 
   class Success < Trither::Box
-    include Contracts::Core
-    C = Contracts
+    include ::Trither::BasicTypes
 
     Contract C::None => false
     def failure?

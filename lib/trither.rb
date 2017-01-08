@@ -17,6 +17,14 @@ module Trither
         (@value == other.instance_variable_get('@value'))
     end
   end
+
+  module BasicTypes
+    include Contracts::Core
+    C = Contracts
+    Predicate = C::Func[C::Any => C::Bool]
+    Func0 = C::Func[C::None => C::Any]
+    Func1 = C::Func[C::Any => C::Any]
+  end
 end
 
 require 'trither/try'

@@ -1,3 +1,5 @@
+require 'contracts'
+
 module Option
   include Contracts::Core
   C = Contracts
@@ -10,7 +12,7 @@ module Option
 
   NoneType = ->(x) { x == None }
   OptionType = C::Or[NoneType, Some]
-  Predicate = C::Func[C::Any => C::Bool]
+  Func1toOption = C::Func[C::Any => OptionType]
 
   Contract C::Any => C::Or[->(x) { x == None }, Some]
   def self.make(value)
@@ -23,6 +25,7 @@ module Option
 
   module None
     include Contracts::Core
+    include ::Trither::BasicTypes
 
     Contract C::None => true
     def self.empty?
@@ -39,29 +42,29 @@ module Option
       default
     end
 
-    Contract C::Func[C::Any => C::Any] => NoneType
+    Contract Func1 => NoneType
     def self.map
       self
     end
 
-    Contract C::Func[C::Any => OptionType] => OptionType
+    Contract Func1toOption => OptionType
     def self.flat_map
       self
     end
 
-    Contract C::Func[C::None => OptionType] => OptionType
+    Contract Func1toOption => OptionType
     def self.or_else
       yield
     end
 
-    Contract C::Func[C::None => C::Any] => C::Any
+    Contract Func0 => C::Any
     def self.get_or_else
       yield
     end
   end
 
   class Some
-    include Contracts::Core
+    include ::Trither::BasicTypes
 
     Contract C::None => false
     def empty?
@@ -78,12 +81,12 @@ module Option
       @value
     end
 
-    Contract C::Func[C::Any => C::Any] => OptionType
+    Contract Func1 => OptionType
     def map
       Option.make(yield @value)
     end
 
-    Contract C::Func[C::Any => OptionType] => OptionType
+    Contract Func1toOption => OptionType
     def flat_map
       result = yield @value
       if result.nil?
@@ -93,12 +96,12 @@ module Option
       end
     end
 
-    Contract C::Func[C::None => OptionType] => Some
+    Contract Func1toOption => Some
     def or_else
       self
     end
 
-    Contract C::Func[C::None => C::Any] => C::Any
+    Contract Func0 => C::Any
     def get_or_else
       @value
     end

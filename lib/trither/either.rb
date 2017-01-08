@@ -1,8 +1,7 @@
 require 'contracts'
 
 module Either
-  include Contracts::Core
-  C = Contracts
+  include ::Trither::BasicTypes
 
   class Left < Trither::Box
   end
@@ -11,12 +10,10 @@ module Either
   end
 
   EitherType = C::Or[Left, Right]
-  Func1 = C::Func[C::Any => C::Any]
   Func1toEither = C::Func[C::Any => EitherType]
 
   class Left < Trither::Box
-    include Contracts::Core
-    C = Contracts
+    include ::Trither::BasicTypes
 
     Contract C::None => true
     def left?
@@ -55,8 +52,7 @@ module Either
   end
 
   class Right < Trither::Box
-    include Contracts::Core
-    C = Contracts
+    include ::Trither::BasicTypes
 
     Contract C::None => false
     def left?

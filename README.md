@@ -125,6 +125,4 @@ Possibly add `empty_map` or `none_map` to Option
 - Some(x) => Some(x)
 - None => Try.make(yield block())
 
-Refactor contracts
-
 ADT?
