@@ -2,7 +2,7 @@ require 'contracts'
 
 module Try
   include Contracts::Core
-  include ::Trither::BasicTypes
+  include Trither::BasicTypes
 
   class Failure < Trither::Box
   end
@@ -22,8 +22,6 @@ module Try
   end
 
   class Failure < Trither::Box
-    include ::Trither::BasicTypes
-
     Contract C::None => true
     def failure?
       true
@@ -61,8 +59,6 @@ module Try
   end
 
   class Success < Trither::Box
-    include ::Trither::BasicTypes
-
     Contract C::None => false
     def failure?
       false

@@ -44,7 +44,7 @@ module Option
 
   module None
     include Contracts::Core
-    include ::Trither::BasicTypes
+    include Trither::BasicTypes
 
     Contract C::None => true
     def self.empty?
@@ -83,8 +83,6 @@ module Option
   end
 
   class Some
-    include ::Trither::BasicTypes
-
     Contract C::None => false
     def empty?
       false
