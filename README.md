@@ -1,6 +1,9 @@
 # Trither
 
-Very simple implementations of Try, Either, and Option inspired by Scala
+Very simple implementations of Try, Either, and Option inspired by Scala.
+Depends on [contracts.ruby](https://egonschiele.github.io/contracts.ruby/).
+Disable contracts in production by setting
+the NO_CONTRACTS environment variable.
 
 
 ## Installation
@@ -88,41 +91,7 @@ Option (Some or None) methods
 
 ## Usage
 
-```ruby
-require 'trither'
-
-try = Try::Success.new('data')
-another_try = try.flat_map do |data|
-  do_something_and_return_a_try(data)
-end
-a_3rd_try = another_try.map do |data|
-  do_something_and_return_new_data(data)
-end
-result = a_3rd_try.get_or_else do |error|
-  handle_error(error)
-end
-# Can also use factory method
-try = Try.make { some_risky_computation() }
-
-either = Either::Right.new('data')
-  .right_map { |right_data| do_righty_stuff(right_data) }
-  .left_map { |left_data| do_lefty_stuff(left_data) }
-
-if either.right?
-  do_something(either.right)
-else
-  do_something_else(either.left)
-end
-
-# returns 'No greeting'
-Option.make(nil).map { |s| s + ' world' }.fetch('No greeting')
-# returns 'hello world'
-Option.make('hello').map { |s| s + ' world' }.fetch('No greeting')
-# returns 'No greeting'
-Option.make(nil).map { |s| s + ' world' }.get_or_else { 'No greeting' }
-# returns 'hello world'
-Option.make('hello').map { |s| s + ' world' }.get_or_else { 'No greeting' }
-```
+See [usage.rb](usage.rb).
 
 
 ## Development

@@ -12,6 +12,15 @@ module Option
   OptionType = C::Or[NoneType, Some]
   Predicate = C::Func[C::Any => C::Bool]
 
+  Contract C::Any => C::Or[->(x) { x == None }, Some]
+  def self.make(value)
+    if value.nil?
+      None
+    else
+      Some.new(value)
+    end
+  end
+
   module None
     include Contracts::Core
 
@@ -92,15 +101,6 @@ module Option
     Contract C::Func[C::None => C::Any] => C::Any
     def get_or_else
       @value
-    end
-  end
-
-  Contract C::Any => C::Or[->(x) { x == None }, Some]
-  def self.make(value)
-    if value.nil?
-      None
-    else
-      Some.new(value)
     end
   end
 end
