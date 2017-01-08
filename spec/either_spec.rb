@@ -42,6 +42,29 @@ describe 'Either' do
         end.not_to raise_error
       end
     end
+
+    describe '#left_flat_map' do
+      it 'executes given block with value and returns the result' do
+        result = either_left.left_flat_map do |value|
+          Either::Right.new(value.to_s)
+        end
+        expect(result).to eq Either::Right.new('my_left')
+      end
+    end
+
+    describe '#right_flat_map' do
+      it 'returns self' do
+        expect(either_left.right_flat_map { either_right }).to eq either_left
+      end
+
+      it 'does not execute given block' do
+        expect do
+          either_left.right_flat_map do
+            raise 'should not run'
+          end
+        end.not_to raise_error
+      end
+    end
   end
 
   describe Either::Right do
@@ -81,6 +104,29 @@ describe 'Either' do
       it 'executes given block with value and wraps result in a Right' do
         either = either_right.right_map(&:to_s)
         expect(either).to eq(Either::Right.new('my_right'))
+      end
+    end
+
+    describe '#left_flat_map' do
+      it 'returns self' do
+        expect(either_right.left_flat_map { either_left }).to eq either_right
+      end
+
+      it 'does not execute given block' do
+        expect do
+          either_right.left_flat_map do
+            raise 'should not run'
+          end
+        end.not_to raise_error
+      end
+    end
+
+    describe '#right_flat_map' do
+      it 'executes given block with value and returns the result' do
+        result = either_right.right_flat_map do |value|
+          Either::Left.new(value.to_s)
+        end
+        expect(result).to eq Either::Left.new('my_right')
       end
     end
   end
