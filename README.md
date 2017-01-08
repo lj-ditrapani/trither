@@ -26,7 +26,7 @@ Factory methods
 
     Try.make { computation }
         If computation raises an error => Failure(error)
-        If computation returs without raising an error => Success(result)
+        If computation returns without raising an error => Success(result)
 
     Option.make(value)
         If value.nil? => None

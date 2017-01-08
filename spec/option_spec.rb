@@ -24,7 +24,7 @@ describe Option do
 
     describe '.filter' do
       it 'returns self' do
-        expect(none.filter).to be none
+        expect(none.filter { |_x| true }).to be none
       end
 
       it 'does not execute given block' do
@@ -42,7 +42,7 @@ describe Option do
 
     describe '.map' do
       it 'returns self' do
-        expect(none.map).to be none
+        expect(none.map(&:-@)).to be none
       end
 
       it 'does not execute given block' do
@@ -54,7 +54,7 @@ describe Option do
 
     describe '.flat_map' do
       it 'returns self' do
-        expect(none.flat_map).to be none
+        expect(none.flat_map(&:-@)).to be none
       end
 
       it 'does not execute given block' do
@@ -72,7 +72,7 @@ describe Option do
       end
 
       it 'returns value of given block' do
-        option = none.get_or_else { Option.make :else_data }
+        option = none.or_else { Option.make :else_data }
         expect(option).to eq Option::Some.new(:else_data)
       end
     end
@@ -144,6 +144,7 @@ describe Option do
       it 'passes the value to the block' do
         some.flat_map do |data|
           expect(data).to eq :data
+          Option.make(:new_data)
         end
       end
 
@@ -171,7 +172,7 @@ describe Option do
 
     describe '#or_else' do
       it 'returns self' do
-        expect(some.or_else).to be some
+        expect(some.or_else { Some.new(:default_data) }).to be some
       end
 
       it 'does not execute given block' do
@@ -183,7 +184,7 @@ describe Option do
 
     describe '#get_or_else' do
       it 'returns value' do
-        expect(some.get_or_else).to eq :data
+        expect(some.get_or_else { :default_data }).to eq :data
       end
 
       it 'does not execute block' do
