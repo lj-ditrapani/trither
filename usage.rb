@@ -12,7 +12,7 @@ def do_something_and_return_new_data(data)
   data + ' more data'
 end
 
-def some_risky_computation()
+def some_risky_computation
   1 / 0
 end
 
@@ -23,12 +23,11 @@ end
 a_3rd_try = another_try.map do |data|
   do_something_and_return_new_data(data)
 end
-result = a_3rd_try.get_or_else do |error|
+a_3rd_try.get_or_else do |error|
   handle_error(error)
 end
 # Can also use factory method
-try = Try.make { some_risky_computation() }
-
+Try.make { some_risky_computation }
 
 def do_righty_stuff(right_data)
   right_data + ' more right data'
@@ -38,7 +37,9 @@ def do_lefty_stuff(left_data)
   left_data + ' more left data'
 end
 
-either = Either::Right.new('data')
+either =
+  Either::Right
+  .new('data')
   .right_map { |right_data| do_righty_stuff(right_data) }
   .left_map { |left_data| do_lefty_stuff(left_data) }
 
