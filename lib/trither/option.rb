@@ -10,11 +10,10 @@ module Option
   class Some < Trither::Box
   end
 
-  NoneType = ->(x) { x == None }
-  OptionType = C::Or[NoneType, Some]
+  OptionType = C::Or[C::Eq[None], Some]
   Func1toOption = C::Func[C::Any => OptionType]
 
-  Contract C::Any => C::Or[->(x) { x == None }, Some]
+  Contract C::Any => C::Or[C::Eq[None], Some]
   def self.make(value)
     if value.nil?
       None
@@ -52,7 +51,7 @@ module Option
       true
     end
 
-    Contract Predicate => NoneType
+    Contract Predicate => C::Eq[None]
     def self.filter
       self
     end
@@ -62,7 +61,7 @@ module Option
       default
     end
 
-    Contract Func1 => NoneType
+    Contract Func1 => C::Eq[None]
     def self.map
       self
     end
