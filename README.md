@@ -118,11 +118,13 @@ The gem is available as open source under the terms of the
 
 
 ## TODO
-Possibly add `flat_map` to Either (`right_flat_map` & `left_flat_map`)
-- Use case:  If you have an operation on an either that returns another either
-- Not sure if the use case is that useful
-- Makes it more monadic
+Add any & flatten to option
+all(seq(option)) -> option[seq[T]] & flatten(seq[option[T]]) -> seq[T]
 
 Possibly add `empty_map` or `none_map` to Option
 - Some(x) => Some(x)
 - None => Try.make(yield block())
+
+Refactor contracts
+
+ADT?
