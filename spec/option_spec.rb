@@ -15,6 +15,25 @@ describe Option do
     end
   end
 
+  describe '.all' do
+    it 'returns Some[Array] if all elements are Some' do
+      result = Option.all [Option.make(:a), Option.make(:b), Option.make(:c)]
+      expect(result).to eq Option::Some.new([:a, :b, :c])
+    end
+
+    it 'returns None if any element is a None' do
+      result = Option.all [Option.make(:a), Option::None, Option.make(:c)]
+      expect(result).to eq Option::None
+    end
+  end
+
+  describe '.flatten' do
+    it 'returns an array of values, filtering out the Nones' do
+      result = Option.flatten [Option.make(:a), Option::None, Option.make(:c)]
+      expect(result).to eq [:a, :c]
+    end
+  end
+
   describe Option::None do
     describe '.empty?' do
       it 'returns true' do

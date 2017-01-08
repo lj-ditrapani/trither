@@ -23,6 +23,26 @@ module Option
     end
   end
 
+  Contract C::ArrayOf[OptionType] => OptionType
+  def self.all(array_of_options)
+    array_of_options.reduce(Some.new([])) do |memo, option|
+      memo.flat_map do |array|
+        option.map { |value| array + [value] }
+      end
+    end
+  end
+
+  Contract C::ArrayOf[OptionType] => C::ArrayOf[C::Any]
+  def self.flatten(array_of_options)
+    array_of_options.reduce([]) do |array, option|
+      if option.empty?
+        array
+      else
+        array + [option.get_or_else { raise StandardError }]
+      end
+    end
+  end
+
   module None
     include Contracts::Core
     include ::Trither::BasicTypes
