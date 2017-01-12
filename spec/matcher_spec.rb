@@ -26,7 +26,7 @@ describe Trither::Matcher do
         end
       end.to raise_error RuntimeError
     end
-    
+
     it 'fails if the same class was previously defined' do
       matcher = Trither::Matcher.new(MyADT, [Symbol, String])
       matcher.on Symbol do
@@ -40,7 +40,8 @@ describe Trither::Matcher do
 
   describe '#exhaustive?' do
     it 'returns false if no calls to on' do
-      expect(Trither::Matcher.new(MyADT, [Symbol, String]).exhaustive?).to be false
+      matcher = Trither::Matcher.new(MyADT, [Symbol, String])
+      expect(matcher.exhaustive?).to be false
     end
 
     it 'returns false if not all classes have been covered' do

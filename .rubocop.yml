@@ -2,3 +2,6 @@ Documentation:
     Enabled: false
 Style/AccessorMethodName:
     Enabled: false
+Metrics/MethodLength:
+    CountComments: false  # count full line comments?
+    Max: 16

@@ -15,19 +15,13 @@ module Trither
 
     Contract Class, C::Func[C::Any => C::Any] => nil
     def on(klass, &block)
-      if @expected_subtypes.include? klass
-        if @blocks.key?(klass)
-          raise RuntimeError.new("#{klass} matched on more than once")
-        else
-          @blocks[klass] = block
-          @count += 1
-          if @count == @max
-            @exhaustive = true
-          end
-        end
-      else
-        raise RuntimeError.new("#{klass} not member of ADT #{@adt}")
+      unless @expected_subtypes.include? klass
+        raise "#{klass} not member of ADT #{@adt}"
       end
+      raise "#{klass} matched on more than once" if @blocks.key?(klass)
+      @blocks[klass] = block
+      @count += 1
+      @exhaustive = true if @count == @max
       nil
     end
 
